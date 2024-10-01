@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: music-api
+  profiles:
+    active: dev
