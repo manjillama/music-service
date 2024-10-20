@@ -14,22 +14,21 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @DynamoDbBean
 public class Song extends Media implements Serializable {
-
-    private String artistId;  // Partition Key
-    private String songId;    // Sort Key
-    private String albumId;
+    private String id;
+    private String artistId;
+    private String artistName;
+    private AlbumInfo album;
     private String lyrics;
+    private long totalStreams;
 
-    // Partition key for the main table (artistId)
     @DynamoDbPartitionKey
-    public String getArtistId() {
-        return artistId;
+    public String getId() {
+        return id;
     }
 
-    // Sort key for the main table (songId)
     @DynamoDbSortKey
-    public String getSongId() {
-        return songId;
+    public String getArtistId() {
+        return artistId;
     }
 
     // GSI for querying songs by genre
@@ -39,9 +38,18 @@ public class Song extends Media implements Serializable {
         return super.getGenre();
     }
 
-    // LSI for querying songs by albumId (within the same artist)
-    @DynamoDbSecondarySortKey(indexNames = "AlbumIndex")
-    public String getAlbumId() {
-        return albumId;
+    @DynamoDbSecondarySortKey(indexNames = "TotalStreamsIndex")
+    public long getTotalStreams() {
+        return totalStreams;
+    }
+
+    @DynamoDbAttribute("album")
+    public AlbumInfo getAlbum() {
+        return album;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Song{%s::%s::%s::%s}", id, artistId, super.getTitle(), album.getTitle());
     }
 }

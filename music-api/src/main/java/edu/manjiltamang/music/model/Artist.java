@@ -10,28 +10,20 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
 @NoArgsConstructor
 @DynamoDbBean
 public class Artist {
-    private String artistId;
+    private String id;
     private String name;
     private long totalStreams;
-    private String genre;
     private String country;
     private int debutYear;
 
     // Primary partition key (artistId) for the main table
     @DynamoDbPartitionKey
-    public String getArtistId() {
-        return artistId;
+    public String getId() {
+        return id;
     }
 
-    // Use genre or a static partition key in the GSI for global queries
-    @DynamoDbSecondaryPartitionKey(indexNames = "TotalStreamsIndex")
-    public String getGenre() {
-        return genre;
-    }
-
-    // Use totalStreams as the sort key in the GSI for ordering by streams
-    @DynamoDbSecondarySortKey(indexNames = "TotalStreamsIndex")
-    public long getTotalStreams() {
-        return totalStreams;
+    @Override
+    public String toString() {
+        return String.format("Artist{%s::%s}", id, name);
     }
 }

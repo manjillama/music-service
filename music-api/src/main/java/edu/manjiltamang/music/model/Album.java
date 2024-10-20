@@ -14,12 +14,14 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @DynamoDbBean
 public class Album extends Media implements Serializable {
-    private String albumId;
+    private String id;
     private String artistId;
+    private String artistName;
+    private int totalSongs;
 
     @DynamoDbPartitionKey
-    public String getAlbumId() {
-        return albumId;
+    public String getId() {
+        return id;
     }
 
     @DynamoDbSortKey
@@ -28,8 +30,7 @@ public class Album extends Media implements Serializable {
     }
 
     @Override
-    @DynamoDbSecondaryPartitionKey(indexNames = "GenreIndex")
-    public String getGenre() {
-        return super.getGenre();
+    public String toString() {
+        return String.format("Album{%s::%s::%s}", id, artistId, super.getTitle());
     }
 }
