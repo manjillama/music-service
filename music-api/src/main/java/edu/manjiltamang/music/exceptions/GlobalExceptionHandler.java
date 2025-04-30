@@ -78,7 +78,6 @@ public class GlobalExceptionHandler {
 
     @Nonnull
     private HttpErrorDetails getHttpErrorDetails(Exception ex, WebRequest request) {
-        //Genesys handled exceptions
         if (ex instanceof HttpErrorDetails) {
             return (HttpErrorDetails) ex;
         }
