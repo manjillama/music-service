@@ -6,14 +6,12 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
 
-import java.io.Serializable;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @DynamoDbBean
-public class Album extends Media implements Serializable {
+public class Album extends Media {
     private String id;
     private String artistId;
     private String artistName;

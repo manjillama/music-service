@@ -13,11 +13,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @DynamoDbBean
-public class Song extends Media implements Serializable {
+public class Song extends Media {
     private String id;
     private String artistId;
     private String artistName;
-    private AlbumInfo album;
+    private Album album;
     private String lyrics;
     private long totalStreams;
 
@@ -26,26 +26,11 @@ public class Song extends Media implements Serializable {
         return id;
     }
 
-    @DynamoDbSortKey
-    public String getArtistId() {
-        return artistId;
-    }
-
     // GSI for querying songs by genre
     @Override
     @DynamoDbSecondaryPartitionKey(indexNames = "GenreIndex")
     public String getGenre() {
         return super.getGenre();
-    }
-
-    @DynamoDbSecondarySortKey(indexNames = "TotalStreamsIndex")
-    public long getTotalStreams() {
-        return totalStreams;
-    }
-
-    @DynamoDbAttribute("album")
-    public AlbumInfo getAlbum() {
-        return album;
     }
 
     @Override

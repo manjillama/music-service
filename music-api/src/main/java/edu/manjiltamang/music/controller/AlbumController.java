@@ -1,6 +1,6 @@
 package edu.manjiltamang.music.controller;
 
-import edu.manjiltamang.music.dto.AlbumDto;
+import edu.manjiltamang.music.dto.Album;
 import edu.manjiltamang.music.service.AlbumService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -41,7 +41,7 @@ public class AlbumController {
                     description = "HTTP status NOT FOUND"
             )
     })
-    public ResponseEntity<?> createAlbum(@RequestBody AlbumDto album) {
+    public ResponseEntity<Album> createAlbum(@RequestBody Album album) {
         albumService.createAlbum(album);
         return ResponseEntity
                 .status(HttpStatus.CREATED).body(null);

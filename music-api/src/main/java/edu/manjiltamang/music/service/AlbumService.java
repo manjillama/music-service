@@ -1,8 +1,7 @@
 package edu.manjiltamang.music.service;
 
-import edu.manjiltamang.music.dto.AlbumDto;
+import edu.manjiltamang.music.dto.Album;
 import edu.manjiltamang.music.exceptions.NotFoundException;
-import edu.manjiltamang.music.model.Album;
 import edu.manjiltamang.music.model.Artist;
 import edu.manjiltamang.music.repository.AlbumDAO;
 import edu.manjiltamang.music.repository.ArtistDAO;
@@ -24,11 +23,11 @@ public class AlbumService {
         this.artistDAO = artistDAO;
     }
 
-    public Album createAlbum(AlbumDto albumDto) {
+    public edu.manjiltamang.music.model.Album createAlbum(Album albumDto) {
         LOG.info("Creating album with id: {}", albumDto.getId());
         Artist artist = artistDAO.getArtist(albumDto.getArtistId()).orElseThrow(() -> new NotFoundException("Artist", albumDto.getArtistId()));
 
-        Album album = new Album();
+        edu.manjiltamang.music.model.Album album = new edu.manjiltamang.music.model.Album();
         album.setId(albumDto.getId());
         album.setTotalSongs(0);
         album.setTitle(albumDto.getTitle());

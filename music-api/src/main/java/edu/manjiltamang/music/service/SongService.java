@@ -1,8 +1,6 @@
 package edu.manjiltamang.music.service;
 
-import edu.manjiltamang.music.dto.SongDto;
-import edu.manjiltamang.music.model.AlbumInfo;
-import edu.manjiltamang.music.model.Song;
+import edu.manjiltamang.music.dto.Song;
 import edu.manjiltamang.music.repository.SongDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +17,10 @@ public class SongService {
         this.songDAO = songDAO;
     }
 
-    public Song createSong(SongDto songDto) {
+    public edu.manjiltamang.music.model.Song createSong(Song songDto) {
         LOG.info("Creating song with id: {} & artist id: {}", songDto.getId(), songDto.getArtistId());
 
-        Song song = new Song();
+        edu.manjiltamang.music.model.Song song = new edu.manjiltamang.music.model.Song();
         song.setId(songDto.getId());
         song.setArtistId(songDto.getArtistId());
         song.setArtistName(songDto.getArtistName());
@@ -32,10 +30,7 @@ public class SongService {
         song.setTitle(songDto.getTitle());
         song.setTotalStreams(0);
 
-        AlbumInfo albumInfo = new AlbumInfo();
-        albumInfo.setId(songDto.getAlbumId());
-        albumInfo.setTitle(songDto.getAlbumTitle());
-        song.setAlbum(albumInfo);
+        // Todo: set album
 
         return songDAO.writeIfNotExists(song);
     }

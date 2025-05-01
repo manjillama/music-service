@@ -25,18 +25,19 @@ public class ArtistDAO {
     }
 
     public Artist writeIfNotExists(@Nonnull Artist artist) {
-        try {
-            artistTable.putItem(PutItemEnhancedRequest.builder(Artist.class)
-                    .item(artist)
-                    .conditionExpression(Expression.builder()
-                            .expression("attribute_not_exists(id)")
-                            .build())
-                    .build());
-            LOG.debug("Created {}", artist);
-        } catch (ConditionalCheckFailedException ex) {
-            LOG.debug("Did not write {} because it already existed", artist);
-        }
         return artist;
+//        try {
+//            artistTable.putItem(PutItemEnhancedRequest.builder(Artist.class)
+//                    .item(artist)
+//                    .conditionExpression(Expression.builder()
+//                            .expression("attribute_not_exists(id)")
+//                            .build())
+//                    .build());
+//            LOG.debug("Created {}", artist);
+//        } catch (ConditionalCheckFailedException ex) {
+//            LOG.debug("Did not write {} because it already existed", artist);
+//        }
+//        return artist;
     }
 
     public Optional<Artist> getArtist(@Nonnull String artistId) {
