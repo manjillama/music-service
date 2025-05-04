@@ -1,0 +1,8 @@
+aws:
+  accessKeyId: {{accessKeyId}}
+  secretAccessKey: {{secretAccessKey}}
+  region: {{region}}
+
+logging:
+  level:
+    edu.manjiltamang.music: {{level}}

@@ -37,3 +37,4 @@ build/
 
 ### CONFIG ###
 application-*.yml
+!application-dev.example.yml
