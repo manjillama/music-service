@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  MusicKinesisAdapter:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: edu.manjiltamang.lambda.KinesisAdapterHandler::handleRequest
+      Runtime: java17
+      Timeout: 15  # <-- Add this line (in seconds)
+      Events:
+        Stream:
+          Type: DynamoDB
+          Properties:
+            Stream: arn:aws:dynamodb:us-east-1:000000000000:table/DummyTable/stream/2024-01-01T00:00:00.000
+            StartingPosition: LATEST

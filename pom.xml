@@ -17,6 +17,7 @@
 
     <modules>
         <module>music-api</module>
+        <module>music-kinesis-adapter</module>
     </modules>
 
     <properties>
