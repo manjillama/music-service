@@ -3,3 +3,8 @@ spring:
     name: music-api
   profiles:
     active: dev
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info  # expose /actuator/health
