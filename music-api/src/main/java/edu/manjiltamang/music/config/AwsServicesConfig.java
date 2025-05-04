@@ -3,10 +3,7 @@ package edu.manjiltamang.music.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.AwsCredentials;
-import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.*;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
@@ -15,16 +12,12 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 public class AwsServicesConfig {
     @Value("${aws.region}")
     Region region;
-    @Value("${aws.accessKeyId}")
-    String accessKeyId = "";
-    @Value("${aws.secretAccessKey}")
-    String secretAccessKey = "";
 
     @Bean
-    public DynamoDbClient dynamoDbClient(AwsCredentialsProvider awsCredentialsProvider) {
+    public DynamoDbClient dynamoDbClient() {
         return DynamoDbClient.builder()
                 .region(region)
-                .credentialsProvider(awsCredentialsProvider)
+                .credentialsProvider(awsCredentialsProvider())
                 .build();
     }
 
@@ -35,13 +28,25 @@ public class AwsServicesConfig {
                 .build();
     }
 
-    @Bean
     public AwsCredentialsProvider awsCredentialsProvider() {
-        AwsCredentials awsCredentials = AwsBasicCredentials.create(
-                accessKeyId,
-                secretAccessKey
-        );
-        return StaticCredentialsProvider.create(awsCredentials);
+        String env = System.getenv("ENV");
+        if ("dev".equalsIgnoreCase(env)) {
+            // Reads from your local ~/.aws/credentials file:
+            return ProfileCredentialsProvider.create("default");
+        } else {
+            /**
+             * Looks for credentials in this order:
+             * 	1. Environment variables:
+             *     AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+             * 	2. Java system properties:
+             *     aws.accessKeyId, aws.secretAccessKey
+             * 	3. Profile credentials file:
+             *     ~/.aws/credentials
+             * 	4. EC2/Lambda IAM role:
+             *     Automatically retrieved from instance metadata
+             */
+            return DefaultCredentialsProvider.create();
+        }
     }
 
 }

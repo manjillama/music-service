@@ -1,43 +1,93 @@
-## Requirements
+# Music Service
+
+Scalable Spring Boot application using DynamoDB, DynamoDB streams, Kinesis, Lambda and CloudFormation.
+
+# Requirements
 
 - Java 17
-- DynamoDB
+- AWS CLI (Install guide)
+- Docker (for local Lambda testing)
+- AWS SAM CLI
 
-## Setup
+# Getting Started
 
-Import this project in your IDE.
+1. Clone and Import
 
-### Configuration
+   Import the project into your IDE of choice (e.g., IntelliJ, VSCode).
 
-Change `application-dev.example.yml` to `application-dev.yml` and update configuration.
+2. Set Up AWS CLI (for local access)
 
-### Run locally
+   ```bash
+   aws configure
+   ```
 
-Run music-api using your IDE or run
+   Ensure credentials and default region are properly configured.
 
-```sh
+# Configuration
+
+1. Rename the sample config file:
+
+   ```bash
+   cp music-api/src/main/resources/application-dev.example.yml music-api/src/main/resources/application-dev.yml
+   ```
+
+2. Edit `application-dev.yml` and update AWS region and any other necessary values.
+
+# Running Locally
+
+**Run music-api**
+
+Via terminal:
+
+```bash
 mvn clean install
-java -jar music-api/target/music-api-0.0.1-SNAPSHOT.jar
+java -DENV=dev -jar music-api/target/music-api-0.0.1-SNAPSHOT.jar
 ```
 
-### Testing DynamoDB Streams → Lambda Locally
+Or, directly from your IDE. Make sure to pass ENV=dev environment variable when running locally.
 
-Use AWS SAM (Serverless Application Model)
+# Testing DynamoDB Streams → Lambda Locally
 
-AWS SAM lets you simulate DynamoDB Streams and invoke your Lambda locally.
+This project includes a Lambda (music-kinesis-adapter) that listens to DynamoDB Streams. You can test this flow locally
+using AWS SAM.
 
-**Prerequisites:**
+## Prerequisites
 
-- Install:
-- AWS SAM CLI
-- Docker (SAM runs Lambdas in Docker)
+- AWS SAM CLI installed
+- Docker running
 
-**Local Testing Flow**
+## Local Testing Flow
 
-1. Define a SAM template (template.yaml). See `template.yaml` file
-2. Create a sample DynamoDB stream event. See `event.json` file
-3. Invoke your Lambda locally - From `music-kinesis-adapter` dir run:
-   ```sh
-    sam build
-    sam local invoke MusicKinesisAdapter --event event.json
-    ```
+1. Define the function and event source in template.yaml (see music-kinesis-adapter/template.yaml).
+2. Create a test stream event, e.g., event.json (sample included).
+3. Invoke the Lambda locally from the music-kinesis-adapter directory:
+   ```bash
+   sam build
+   sam local invoke MusicKinesisAdapter --event event.json
+   ```
+
+### Understanding template.yml
+
+template.yml can serve two purposes depending on how it’s used:
+
+**Local Simulation**
+
+```bash
+sam local invoke
+sam local start-api
+```
+
+- Runs Lambda/API Gateway locally using Docker
+- Useful for testing integrations before deploying
+
+**Real AWS Deployment**
+
+```bash
+sam build
+sam deploy --guided
+```
+
+- Packages and deploys your resources (Lambda, DynamoDB, etc.) to AWS via CloudFormation
+- Supports IAM roles, environment variables, event sources, etc.
+
+Changes to template.yml will affect production deployment unless used exclusively for local testing.
