@@ -1,7 +1,6 @@
 package edu.manjiltamang.music.controller;
 
 import edu.manjiltamang.music.dto.Artist;
-import edu.manjiltamang.music.exceptions.NotFoundException;
 import edu.manjiltamang.music.service.ArtistService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -43,9 +42,8 @@ public class ArtistController {
             )
     })
     public ResponseEntity<Artist> getArtist(@PathVariable("id") String id) {
-        throw new NotFoundException("contact", id);
-//        return ResponseEntity
-//                .status(HttpStatus.OK).body(null);
+        return ResponseEntity
+                .status(HttpStatus.OK).body(Artist.from(artistService.getArtist(id)));
     }
 
     @PostMapping

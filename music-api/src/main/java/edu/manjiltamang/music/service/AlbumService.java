@@ -1,14 +1,15 @@
 package edu.manjiltamang.music.service;
 
-import edu.manjiltamang.music.dto.Album;
 import edu.manjiltamang.music.exceptions.NotFoundException;
-import edu.manjiltamang.music.model.Artist;
+import edu.manjiltamang.music.model.Album;
 import edu.manjiltamang.music.repository.AlbumDAO;
 import edu.manjiltamang.music.repository.ArtistDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class AlbumService {
@@ -23,20 +24,14 @@ public class AlbumService {
         this.artistDAO = artistDAO;
     }
 
-    public edu.manjiltamang.music.model.Album createAlbum(Album albumDto) {
-        LOG.info("Creating album with id: {}", albumDto.getId());
-        Artist artist = artistDAO.getArtist(albumDto.getArtistId()).orElseThrow(() -> new NotFoundException("Artist", albumDto.getArtistId()));
+    public Album getAlbum(String albumId) {
+        return albumDAO.getAlbum(albumId).orElseThrow(() -> new NotFoundException("Album", albumId));
+    }
 
-        edu.manjiltamang.music.model.Album album = new edu.manjiltamang.music.model.Album();
-        album.setId(albumDto.getId());
-        album.setTotalSongs(0);
-        album.setTitle(albumDto.getTitle());
-        album.setGenre(albumDto.getGenre());
-        album.setReleaseYear(albumDto.getReleaseYear());
-
-        album.setArtistId(artist.getId());
-        album.setArtistName(artist.getName());
-
+    public Album createAlbum(Album album) {
+        album.setId(String.valueOf(UUID.randomUUID()));
+        LOG.info("Creating album: {}", album);
+        artistDAO.getArtist(album.getArtistId()).orElseThrow(() -> new NotFoundException("Artist", album.getArtistId()));
         return albumDAO.writeIfNotExists(album);
     }
 }

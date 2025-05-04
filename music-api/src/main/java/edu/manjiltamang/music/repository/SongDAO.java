@@ -1,6 +1,7 @@
 package edu.manjiltamang.music.repository;
 
 import edu.manjiltamang.music.config.DynamoUtils;
+import edu.manjiltamang.music.model.Artist;
 import edu.manjiltamang.music.model.Song;
 import jakarta.annotation.Nonnull;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import software.amazon.awssdk.enhanced.dynamodb.Expression;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.model.PutItemEnhancedRequest;
 import software.amazon.awssdk.services.dynamodb.model.ConditionalCheckFailedException;
+
+import java.util.Optional;
 
 @Repository
 public class SongDAO {
@@ -30,17 +33,20 @@ public class SongDAO {
                             .expression("attribute_not_exists(id)")
                             .build())
                     .build());
-            LOG.debug("Created {}", song);
+            LOG.info("Created {}", song);
         } catch (ConditionalCheckFailedException ex) {
-            LOG.debug("Did not write {} because it already existed", song);
+            LOG.info("Did not write {} because it already existed", song);
         }
         return song;
     }
 
-    public Song getSong(@Nonnull String songId) {
-        return songTable
+    public Optional<Song> getSong(@Nonnull String songId) {
+        LOG.debug("Fetching song with ID {}", songId);
+        Song song = songTable
                 .getItem(Key.builder()
                         .partitionValue(songId)
                         .build());
+
+        return Optional.ofNullable(song);
     }
 }

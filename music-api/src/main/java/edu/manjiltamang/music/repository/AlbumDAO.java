@@ -9,8 +9,11 @@ import org.springframework.stereotype.Repository;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.Expression;
+import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.model.PutItemEnhancedRequest;
 import software.amazon.awssdk.services.dynamodb.model.ConditionalCheckFailedException;
+
+import java.util.Optional;
 
 @Repository
 public class AlbumDAO {
@@ -29,10 +32,20 @@ public class AlbumDAO {
                             .expression("attribute_not_exists(id)")
                             .build())
                     .build());
-            LOG.debug("Created {}", album);
+            LOG.info("Created {}", album);
         } catch (ConditionalCheckFailedException ex) {
-            LOG.debug("Did not write {} because it already existed", album);
+            LOG.info("Did not write {} because it already existed", album);
         }
         return album;
+    }
+
+    public Optional<Album> getAlbum(@Nonnull String albumId) {
+        LOG.debug("Fetching album with ID {}", albumId);
+        Album album = albumsTable
+                .getItem(Key.builder()
+                        .partitionValue(albumId)
+                        .build());
+
+        return Optional.ofNullable(album);
     }
 }

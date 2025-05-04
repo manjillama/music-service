@@ -1,6 +1,7 @@
 package edu.manjiltamang.music.controller;
 
 import edu.manjiltamang.music.dto.Album;
+import edu.manjiltamang.music.dto.Artist;
 import edu.manjiltamang.music.service.AlbumService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -26,6 +27,26 @@ public class AlbumController {
         this.albumService = albumService;
     }
 
+    @GetMapping("/{id}")
+    @Operation(
+            summary = "Get Artist by ID",
+            description = "REST API to search an Artist by id"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP status SUCCESS"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "HTTP status NOT FOUND"
+            )
+    })
+    public ResponseEntity<Album> getAlbum(@PathVariable("id") String id) {
+        return ResponseEntity
+                .status(HttpStatus.OK).body(Album.from(albumService.getAlbum(id)));
+    }
+    
     @PostMapping
     @Operation(
             summary = "Create Album",
@@ -42,8 +63,7 @@ public class AlbumController {
             )
     })
     public ResponseEntity<Album> createAlbum(@RequestBody Album album) {
-        albumService.createAlbum(album);
         return ResponseEntity
-                .status(HttpStatus.CREATED).body(null);
+                .status(HttpStatus.CREATED).body(Album.from(albumService.createAlbum(Album.to(album))));
     }
 }

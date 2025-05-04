@@ -1,22 +1,25 @@
 package edu.manjiltamang.music.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
 public class Artist implements Serializable {
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     String id;
     String name;
     long totalStreams;
     int debutYear;
 
     public static Artist from(edu.manjiltamang.music.model.Artist artist) {
-        var artisDto = new Artist();
-        artisDto.setName(artist.getName());
-        artisDto.setDebutYear(artist.getDebutYear());
-        artisDto.setTotalStreams(artist.getTotalStreams());
-        return artisDto;
+        var artistDto = new Artist();
+        artistDto.setId(artist.getId());
+        artistDto.setName(artist.getName());
+        artistDto.setDebutYear(artist.getDebutYear());
+        artistDto.setTotalStreams(artist.getTotalStreams());
+        return artistDto;
     }
 
     public static edu.manjiltamang.music.model.Artist to(Artist artistDto) {

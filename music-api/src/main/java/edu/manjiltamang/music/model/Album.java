@@ -1,34 +1,32 @@
 package edu.manjiltamang.music.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondaryPartitionKey;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @DynamoDbBean
-public class Album extends Media {
+public class Album {
     private String id;
     private String artistId;
-    private String artistName;
     private int totalSongs;
+    private String title;
+    private int releaseYear;
+    private String genre;
 
     @DynamoDbPartitionKey
     public String getId() {
         return id;
     }
 
-    @DynamoDbSortKey
+    @DynamoDbSecondaryPartitionKey(indexNames = "ArtistIndex")
     public String getArtistId() {
         return artistId;
     }
 
     @Override
     public String toString() {
-        return String.format("Album{%s::%s::%s}", id, artistId, super.getTitle());
+        return String.format("Album{%s::%s::%s}", id, artistId, title);
     }
 }
