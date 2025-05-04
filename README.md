@@ -1,6 +1,9 @@
 # Music Service
 
-Scalable Spring Boot application using DynamoDB, DynamoDB streams, Kinesis, Lambda and CloudFormation.
+A scalable music platform that manages songs, albums, and artists, processes real-time changes using event-driven
+architecture, and uses AI to classify song moods and generate summaries.
+
+<img src="https://raw.githubusercontent.com/manjillama/music-service/dev/docs/architecture.png" />
 
 # Requirements
 
@@ -8,8 +11,6 @@ Scalable Spring Boot application using DynamoDB, DynamoDB streams, Kinesis, Lamb
 - AWS CLI (Install guide)
 - Docker (for local Lambda testing)
 - AWS SAM CLI
-
-<img src="https://raw.githubusercontent.com/manjillama/music-service/docs/architecture.png" />
 
 # Getting Started
 
