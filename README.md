@@ -9,6 +9,8 @@ Scalable Spring Boot application using DynamoDB, DynamoDB streams, Kinesis, Lamb
 - Docker (for local Lambda testing)
 - AWS SAM CLI
 
+<img src="https://raw.githubusercontent.com/manjillama/music-service/docs/architecture.png" />
+
 # Getting Started
 
 1. Clone and Import
